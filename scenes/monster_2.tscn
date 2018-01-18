@@ -1,0 +1,349 @@
+[gd_scene load_steps=13 format=1]
+
+[ext_resource path="res://scripts/monster_2.gd" type="Script" id=1]
+[ext_resource path="res://assets/monster_2.png" type="Texture" id=2]
+[ext_resource path="res://assets/player_light_mask.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 2, 1 )
+
+[sub_resource type="Animation" id=2]
+
+length = 0.6
+loop = true
+step = 0.15
+tracks/0/type = "value"
+tracks/0/path = NodePath("rotate/head:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.15, 0.3, 0.45 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=3]
+
+resource/name = "killed"
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("rotate/head:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 17 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Light2D:enabled")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=4]
+
+length = 0.56
+loop = true
+step = 0.07
+tracks/0/type = "value"
+tracks/0/path = NodePath("rotate/head:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.07, 0.14, 0.21, 0.28, 0.35, 0.42, 0.49 ),
+"transitions": FloatArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 9, 10, 11, 12, 13, 14, 15 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0.14 ),
+"transitions": FloatArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_running_dust"
+} ]
+}
+
+[sub_resource type="CircleShape2D" id=5]
+
+custom_solver_bias = 0.0
+radius = 7.0
+
+[sub_resource type="RectangleShape2D" id=6]
+
+custom_solver_bias = 0.0
+extents = Vector2( 3, 6 )
+
+[sub_resource type="RectangleShape2D" id=7]
+
+custom_solver_bias = 0.0
+extents = Vector2( 3, 5 )
+
+[sub_resource type="RectangleShape2D" id=8]
+
+custom_solver_bias = 0.0
+extents = Vector2( 6, 4 )
+
+[sub_resource type="CircleShape2D" id=9]
+
+custom_solver_bias = 0.0
+radius = 56.211
+
+[node name="monster_2" type="KinematicBody2D" groups=[
+"monster",
+]]
+
+transform/pos = Vector2( 1, 1 )
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -1 )
+shapes/0/trigger = false
+collision/layers = 524290
+collision/mask = 2
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+patrol_area_path = null
+
+[node name="rotate" type="Node2D" parent="."]
+
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="head" type="Sprite" parent="rotate"]
+
+transform/pos = Vector2( -1, -1 )
+texture = ExtResource( 2 )
+offset = Vector2( 0.052826, -7.4958 )
+vframes = 5
+hframes = 8
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="anim" type="AnimationPlayer" parent="."]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/idle = SubResource( 2 )
+anims/killed = SubResource( 3 )
+anims/run = SubResource( 4 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = "cycle"
+
+[node name="flocking_area" type="Area2D" parent="."]
+
+visibility/visible = false
+input/pickable = true
+shapes/0/shape = SubResource( 5 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, -1, -1 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision/layers = 2
+collision/mask = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="flocking_area"]
+
+transform/pos = Vector2( -1, -1 )
+shape = SubResource( 5 )
+trigger = false
+_update_shape_index = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="hitbox" type="Area2D" parent="."]
+
+visibility/visible = false
+input/pickable = true
+shapes/0/shape = SubResource( 6 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -6 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+
+transform/pos = Vector2( 0, -6 )
+shape = SubResource( 6 )
+trigger = false
+_update_shape_index = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="damagebox" type="Area2D" parent="." groups=[
+"damagebox",
+]]
+
+input/pickable = true
+shapes/0/shape = SubResource( 7 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -6 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision/layers = 2
+collision/mask = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="damagebox"]
+
+transform/pos = Vector2( 0, -6 )
+shape = SubResource( 7 )
+trigger = false
+_update_shape_index = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="itemarea" type="Area2D" parent="." groups=[
+"blood",
+"monster_2",
+]]
+
+visibility/visible = false
+input/pickable = true
+shapes/0/shape = SubResource( 8 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -4 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision/layers = 0
+collision/mask = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="itemarea"]
+
+transform/pos = Vector2( 0, -4 )
+shape = SubResource( 8 )
+trigger = false
+_update_shape_index = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="attack_area" type="Area2D" parent="."]
+
+visibility/visible = false
+input/pickable = true
+shapes/0/shape = SubResource( 9 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+monitorable = false
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="attack_area"]
+
+shape = SubResource( 9 )
+trigger = false
+_update_shape_index = 0
+
+[node name="killtimer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = true
+autostart = false
+
+[node name="collision" type="CollisionShape2D" parent="."]
+
+transform/pos = Vector2( 0, -1 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Light2D" type="Light2D" parent="."]
+
+transform/pos = Vector2( -1, -1 )
+enabled = false
+editor_only = false
+texture = ExtResource( 3 )
+offset = Vector2( 0, 0 )
+scale = 0.3
+color = Color( 0.859375, 0.810595, 0.54718, 1 )
+energy = 0.5
+mode = 0
+range/height = 0.0
+range/z_min = -1024
+range/z_max = 1024
+range/layer_min = 0
+range/layer_max = 0
+range/item_mask = 2
+shadow/enabled = false
+shadow/color = Color( 0, 0, 0, 0 )
+shadow/buffer_size = 2048
+shadow/esm_multiplier = 80.0
+shadow/item_mask = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+visibility/visible = false
+rect = Rect2( -40, -40, 80, 80 )
+
+[connection signal="area_enter" from="flocking_area" to="." method="_on_flocking_area_area_enter"]
+
+[connection signal="area_exit" from="flocking_area" to="." method="_on_flocking_area_area_exit"]
+
+[connection signal="area_enter" from="hitbox" to="." method="_on_hitbox_area_enter"]
+
+[connection signal="area_exit" from="hitbox" to="." method="_on_hitbox_area_exit"]
+
+[connection signal="body_enter" from="attack_area" to="." method="_on_attack_area_body_enter"]
+
+[connection signal="timeout" from="killtimer" to="." method="_on_killtimer_timeout"]
+
+[connection signal="enter_screen" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_enter_screen"]
+
+[connection signal="exit_screen" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_exit_screen"]
+
+
